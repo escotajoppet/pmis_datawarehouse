@@ -6,7 +6,7 @@
 	odbc_close($access_conn);
 
 
-	// MYSQL DATABASE CONNECTIOn
+	// MYSQL DATABASE CONNECTION
 	$db_host = 'localhost';
 	$db_username = 'root';
 	$db_passwd = 'root';
