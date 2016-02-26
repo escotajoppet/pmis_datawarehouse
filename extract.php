@@ -588,9 +588,9 @@
 
 <?php
 	// MS ACCESS DATABASE CONNECTION
-	// $access_conn = odbc_connect('datawarehouse_lgu', 'admin', 'admin') or die('Error in ms access connection');
+	$access_conn = odbc_connect('datawarehouse_lgu', 'admin', 'admin') or die('Error in ms access connection');
 
-	// $sql = 'SELECT * FROM `bpls_r_application`';
-	// $rs = odbc_exec($access_conn, $sql);
-	// odbc_close($access_conn);
+	$sql = 'SELECT * FROM `bpls_r_application`';
+	$rs = odbc_exec($access_conn, $sql);
+	odbc_close($access_conn);
 ?>
