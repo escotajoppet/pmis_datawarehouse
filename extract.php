@@ -1,23 +1,23 @@
 <?php
-	// MYSQL DATABASE CONNECTION
+	// HRIS DATABASE CONNECTION
 	$db_host = 'localhost';
 	$db_username = 'root';
 	$db_passwd = 'root';
 
 	$db_name = 'datawarehouse_hris';
 
-	$mysql_conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
+	$conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
 
 	$db_name = 'datawarehouse';
 
-	$mysql_conn_dw = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
+	$conn_dw = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
 
 	// Check connection
-	if ($mysql_conn->connect_error) {
-	    die("Connection failed: " . $mysql_conn->connect_error);
+	if ($conn->connect_error) {
+	    die("Connection failed: " . $conn->connect_error);
 	}
 
-	// CUBES!!!
+	// HRIS CUBE!!!
 
 	// dimension 1 (income)
 	$hris_income = array();
@@ -25,7 +25,7 @@
 
 	$sql = "SELECT `id` FROM `hris_income`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -35,7 +35,7 @@
 
 	$sql = "SELECT `income_id`, `income_name`, `income_amount` FROM `py_income`";
 	
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['income_id'], $existing)){
@@ -56,7 +56,7 @@
 
 	$sql = "SELECT `id` FROM `hris_income_overtime`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -66,7 +66,7 @@
 
 	$sql = "SELECT `overtime_id`, `overtime_dates` FROM `py_overtime_dates`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['overtime_id'], $existing)){
@@ -86,7 +86,7 @@
 
 	$sql = "SELECT `id` FROM `hris_income_salary_grade`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -96,7 +96,7 @@
 
 	$sql = "SELECT `salary_id`, `salary_name`, `basic_salary` FROM `tm_salary_grade`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['salary_id'], $existing)){
@@ -117,7 +117,7 @@
 
 	$sql = "SELECT `id` FROM `hris_benefits`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -127,7 +127,7 @@
 
 	$sql = "SELECT `benefits_id`, `benefits_name`, `benefits_amount` FROM `tm_benefits`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['benefits_id'], $existing)){
@@ -149,7 +149,7 @@
 
 	$sql = "SELECT `id` FROM `hris_benefits_leave`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -159,7 +159,7 @@
 
 	$sql = "SELECT `leave_id`, `leave_name`, `start_date`, `end_date`, `leave_type_id` FROM `py_leave`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['leave_id'], $existing)){
@@ -181,7 +181,7 @@
 	foreach($leave_type_ids as $id){
 		$sql = "SELECT `leave_type_name`, `leave_type_convert` FROM `py_leave_type` WHERE `leave_type_id`='$id'";
 
-		if($result = mysqli_query($mysql_conn, $sql)){
+		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
 				while($row = mysqli_fetch_array($result)){
 					$hris_benefits_leave[$cnt]['leave_type'] = $row['leave_type_name'];
@@ -200,7 +200,7 @@
 
 	$sql = "SELECT `id` FROM `hris_benefits_loan`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -210,7 +210,7 @@
 
 	$sql = "SELECT `loan_id`, `loan_name`, `loan_total` FROM `py_loan`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['loan_id'], $existing)){
@@ -231,7 +231,7 @@
 
 	$sql = "SELECT `id` FROM `hris_benefits_bonus`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -241,7 +241,7 @@
 
 	$sql = "SELECT `bonus_id`, `bonus_name`, `bonus_amount` FROM `py_bonus`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['bonus_id'], $existing)){
@@ -262,7 +262,7 @@
 
 	$sql = "SELECT `id` FROM `hris_deductions`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -272,7 +272,7 @@
 
 	$sql = "SELECT `deduction_id`, `deduction_name`, `deduction_total_amount` FROM `py_deductions`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['deduction_id'], $existing)){
@@ -294,7 +294,7 @@
 
 	$sql = "SELECT `id` FROM `hris_deductions_tax`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -304,7 +304,7 @@
 
 	$sql = "SELECT `tax_range_id`, `sal_start`, `sal_end`, `percent`, `plus` FROM `py_tax_range`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['tax_range_id'], $existing)){
@@ -327,7 +327,7 @@
 	foreach($tax_ids as $id){
 		$sql = "SELECT `civil_status`, `dependent_number` FROM `py_tax` WHERE `tax_id`='$id'";
 
-		if($result = mysqli_query($mysql_conn, $sql)){
+		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
 				while($row = mysqli_fetch_array($result)){
 					$hris_deductions_taxes[$cnt]['civil_status'] = $row['civil_status'];
@@ -346,7 +346,7 @@
 
 	$sql = "SELECT `id` FROM `hris_deductions_loan`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -356,7 +356,7 @@
 
 	$sql = "SELECT `loan_id`, `loan_name`, `loan_total` FROM `py_loan`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['loan_id'], $existing)){
@@ -378,7 +378,7 @@
 
 	$sql = "SELECT `id` FROM `hris_employees`";
 
-	if($result = mysqli_query($mysql_conn_dw, $sql)){
+	if($result = mysqli_query($conn_dw, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				array_push($existing, $row['id']);
@@ -388,7 +388,7 @@
 
 	$sql = "SELECT `emp_id`, `contract_start`, `contract_end`, `emp_type_id` FROM `py_loan`";
 
-	if($result = mysqli_query($mysql_conn, $sql)){
+	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
 				if(!in_array($row['emp_id'], $existing)){
@@ -409,7 +409,7 @@
 	foreach($employee_ids as $id){
 		$sql = "SELECT `emp_type_name` FROM `tm_employee_type` WHERE `emp_type_id`='$id'";
 
-		if($result = mysqli_query($mysql_conn, $sql)){
+		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
 				while($row = mysqli_fetch_array($result)){
 					$hris_deductions_taxes[$cnt]['employee_type'] = $row['emp_type_name'];
@@ -421,7 +421,7 @@
 	}
 
 
-	mysqli_close($mysql_conn);
+	mysqli_close($conn);
 
 
 
@@ -429,12 +429,12 @@
 
 	$db_name = 'datawarehouse';
 
-	$mysql_conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
+	$conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
 
 
 	// Check connection
-	if ($mysql_conn->connect_error) {
-	    die("Connection failed: " . $mysql_conn->connect_error);
+	if ($conn->connect_error) {
+	    die("Connection failed: " . $conn->connect_error);
 	}
 
 	foreach ($hris_benefits as $benefit) {
@@ -442,10 +442,10 @@
 
 		echo "BENEFITS: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "benefits success";
 		} else{
-			echo "benefits failed: " . mysqli_error($mysql_conn);
+			echo "benefits failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -454,10 +454,10 @@
 
 		echo "BENEFITS BONUS: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "benefits bonus success";
 		} else{
-			echo "benefits bonus failed: " . mysqli_error($mysql_conn);
+			echo "benefits bonus failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -466,10 +466,10 @@
 
 		echo "BENEFITS LEAVE: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "benefits leave success";
 		} else{
-			echo "benefits leave failed: " . mysqli_error($mysql_conn);
+			echo "benefits leave failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -478,10 +478,10 @@
 
 		echo "BENEFITS LOAN: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "benefits loan success";
 		} else{
-			echo "benefits loan failed: " . mysqli_error($mysql_conn);
+			echo "benefits loan failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -490,10 +490,10 @@
 
 		echo "DEDUCTIONS: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "deductions success";
 		} else{
-			echo "deductions failed: " . mysqli_error($mysql_conn);
+			echo "deductions failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -502,10 +502,10 @@
 
 		echo "BENEFITS BONUS: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "benefits bonus success";
 		} else{
-			echo "benefits bonus failed: " . mysqli_error($mysql_conn);
+			echo "benefits bonus failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -514,10 +514,10 @@
 
 		echo "DEDUCTIONS LOAN: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "deductions loan success";
 		} else{
-			echo "deductions loan failed: " . mysqli_error($mysql_conn);
+			echo "deductions loan failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -526,10 +526,10 @@
 
 		echo "employees: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "deductions taxes success";
 		} else{
-			echo "deductions taxes failed: " . mysqli_error($mysql_conn);
+			echo "deductions taxes failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -538,10 +538,10 @@
 
 		echo "EMPLOYEES: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "employees success";
 		} else{
-			echo "employees failed: " . mysqli_error($mysql_conn);
+			echo "employees failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -550,10 +550,10 @@
 
 		echo "INCOME: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "income success";
 		} else{
-			echo "income failed: " . mysqli_error($mysql_conn);
+			echo "income failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -562,10 +562,10 @@
 
 		echo "INCOME OVERTIME: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "income overtime success";
 		} else{
-			echo "income overtime failed: " . mysqli_error($mysql_conn);
+			echo "income overtime failed: " . mysqli_error($conn);
 		}
 	}
 
@@ -574,23 +574,18 @@
 
 		echo "INCOME BASIC SALARY: $sql\n\n";
 
-		if(mysqli_query($mysql_conn, $sql)){
+		if(mysqli_query($conn, $sql)){
 			echo "income basic salary success";
 		} else{
-			echo "income basic salary failed: " . mysqli_error($mysql_conn);
+			echo "income basic salary failed: " . mysqli_error($conn);
 		}
 	}
 
-	mysqli_close($mysql_conn);
+	mysqli_close($conn);
+
+	echo "HRIS Data Extraction Successful!";
 ?>
 
-
-
-<?php
-	// MS ACCESS DATABASE CONNECTION
-	$access_conn = odbc_connect('datawarehouse_lgu', 'admin', 'admin') or die('Error in ms access connection');
-
-	$sql = 'SELECT * FROM `bpls_r_application`';
-	$rs = odbc_exec($access_conn, $sql);
-	odbc_close($access_conn);
-?>
+<div>
+	<button type="button" onclick="window.location.href='/pmis/datawarehouse/transform.php'" style="margin-top:15px;">TRANSFORM DATA</button>
+</div>
