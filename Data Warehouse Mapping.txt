@@ -1,0 +1,109 @@
+Data Warehouse:
+
+HRIS Cube:
+	Dimension 1 (Income):
+		Fields:
+			ID => py_income
+			Name => py_income
+			Amount => py_income
+
+		Dimension 1.1 (Overtime):
+			Fields:
+				ID => py_overtime_dates
+				DateTime => py_overtime_dates
+
+		Dimension 1.2 (Salary Grade):
+			Fields:
+				ID => tm_salary_grade
+				Name => tm_salary_grade
+				BasicSalary => tm_salary_grade
+
+
+	Dimention 2 (Benefits):
+		Fields:
+			ID => tm_benefits
+			Name => tm_benefits
+			Amount => tm_benefits
+
+		Dimension 2.1 (Leave):
+			Fields:
+				ID => py_leave
+				SDate => py_leave
+				EDate => py_leave
+				LeaveTypeName => py_leave_type.leave_type_name
+
+		Dimension 2.2 (Loan):
+			Fields:
+				ID => py_loan
+				LoanName => py_loan
+
+		Dimension 2.3 (Bonus):
+			Fields:
+				ID => py_bonus
+				Name => py_bonus
+				Amount => py_bonus
+
+	Dimension 3 (Deduction):
+		Fields:
+			ID => py_deduction
+			Name => py_deduction
+			Amount => py_deduction
+
+		Dimension 3.1 (Tax):
+			Fields:
+				ID => py_tax
+				CivilStatus => py_tax
+				DependentNumber => py_tax
+				RangeSalStart => py_tax_range
+				RangeSalEnd => py_tax_range
+				RangePercent => py_tax_range
+
+		Dimension 3.2 (Loan):
+			Fields:
+				ID => py_loan
+				LoanName => py_loan
+
+	Dimention 4 (Employee):
+		Fields:
+			ID => tm_employee
+			Name => tm_employee
+			ContractStart => tm_employee
+			ContractEnd => tm_employee
+			Status => tm_employee
+			Position => tm_position
+			Skill => tm_skills
+
+Layering
+	1. Annual
+	2. Semi-annual
+	3. Quarterly
+	4. Monthly
+
+
+
+LGU Cube:
+	Dimension 1 (Vehicle):
+		Field:
+			ID
+			Type
+			address = makukuha to sa operator id = operator profile
+
+	Dimention 2 (business):
+		Field:
+			ID
+			address
+
+	Dimension 3 (taxpayer):
+		Field:
+			id
+			address
+
+	Dimension 4 (Property):
+		Field:
+			ID
+			address
+
+Layering
+	1. Region 					 = Municipality/City
+	2. Municipality/City = District
+	3. District          = Barangay
