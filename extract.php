@@ -19,6 +19,9 @@
 
 	// HRIS CUBE!!!
 
+	$datum = array();
+
+	/////////////////////////////////////////////////////////
 	// dimension 1 (income)
 	$hris_income = array();
 	$existing = array();
@@ -32,9 +35,32 @@
 			}
 		}
 	}
-
-	$sql = "SELECT `income_id`, `income_name`, `income_amount` FROM `py_income`";
 	
+	$file = fopen("./hris-csv/income.csv", "r");
+
+	$inkam = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+	
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$inkam['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($inkam['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	var_dump($inkam) ;
+
+	fclose($file);
+
+	$sql = sqlSelect($inkam);
+
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
@@ -48,8 +74,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 1.1 (overtime)
 	$hris_income_overtime = array();
 	$existing = array();
@@ -64,7 +92,26 @@
 		}
 	}
 
-	$sql = "SELECT `overtime_id`, `overtime_dates` FROM `py_overtime_dates`";
+	$file = fopen("./hris-csv/income_overtime.csv", "r");
+
+	$obertaym = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$obertaym['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 0; $i < count($line); $i++) {
+				array_push($obertaym['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($obertaym);
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -78,8 +125,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 1.2 (salary grade)
 	$hris_income_salary_grade = array();
 	$existing = array();
@@ -94,7 +143,26 @@
 		}
 	}
 
-	$sql = "SELECT `salary_id`, `salary_name`, `basic_salary` FROM `tm_salary_grade`";
+	$file = fopen("./hris-csv/income_salary_grade.csv", "r");
+
+	$salari = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$salari['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($salari['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($salari);
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -109,8 +177,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2 (benefits)
 	$hris_benefits = array();
 	$existing = array();
@@ -125,7 +195,26 @@
 		}
 	}
 
-	$sql = "SELECT `benefits_id`, `benefits_name`, `benefits_amount` FROM `tm_benefits`";
+	$file = fopen("./hris-csv/benefits.csv", "r");
+
+	$benepits = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$benepits['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 0; $i < count($line); $i++) {
+				array_push($benepits['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($benepits);
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -140,8 +229,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.1 (leave)
 	$hris_benefits_leave = array();
 	$leave_type_ids = array();
@@ -192,8 +283,10 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.2 (loan)
 	$hris_benefits_loan = array();
 	$existing = array();
@@ -223,8 +316,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.3 (bonus)
 	$hris_benefits_bonus = array();
 	$existing = array();
@@ -254,8 +349,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3 (deductions)
 	$hris_deductions = array();
 	$existing = array();
@@ -285,8 +382,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3.1 (taxes)
 	$hris_deductions_taxes = array();
 	$tax_ids = array();
@@ -338,8 +437,10 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3.2 (loans)
 	$hris_deductions_loans = array();
 	$existing = array();
@@ -369,8 +470,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 4 (employees)
 	$hris_employees = array();
 	$employee_ids = array();
@@ -419,6 +522,7 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
 	mysqli_close($conn);
@@ -584,6 +688,12 @@
 	mysqli_close($conn);
 
 	echo "HRIS Data Extraction Successful!";
+?>
+
+<?php
+	function sqlSelect($dimension){
+		return "SELECT " . join($dimension['fields'], ', ') . " FROM " . $dimension['table_name'];
+	}
 ?>
 
 <div>
