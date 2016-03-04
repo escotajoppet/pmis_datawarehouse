@@ -1,5 +1,7 @@
 <?php
 	// HRIS DATABASE CONNECTION
+	$hris_csvs = "./hris-csv";
+
 	$db_host = 'localhost';
 	$db_username = 'root';
 	$db_passwd = 'root';
@@ -36,7 +38,7 @@
 		}
 	}
 	
-	$file = fopen("./hris-csv/income.csv", "r");
+	$file = fopen("$hris_csvs/income.csv", "r");
 
 	$inkam = array(
 			'table_name' => '',
@@ -55,8 +57,6 @@
 		}
 	}
 
-	fclose($file);
-
 	$sql = sqlSelect($inkam, '1');
 
 	if($result = mysqli_query($conn, $sql)){
@@ -72,6 +72,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -90,7 +92,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/income_overtime.csv", "r");
+	$file = fopen("$hris_csvs/income_overtime.csv", "r");
 
 	$obertaym = array(
 			'table_name' => '',
@@ -123,6 +125,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -141,7 +145,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/income_salary_grade.csv", "r");
+	$file = fopen("$hris_csvs/income_salary_grade.csv", "r");
 
 	$salari = array(
 			'table_name' => '',
@@ -175,6 +179,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -193,7 +199,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/benefits.csv", "r");
+	$file = fopen("$hris_csvs/benefits.csv", "r");
 
 	$benepits = array(
 			'table_name' => '',
@@ -227,6 +233,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -246,7 +254,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/benefits_leave.csv", "r");
+	$file = fopen("$hris_csvs/benefits_leave.csv", "r");
 
 	$lib = array(
 			'table_name' => '',
@@ -329,6 +337,8 @@
 
 		$cnt += 1;
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -347,7 +357,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/benefits_loan.csv", "r");
+	$file = fopen("$hris_csvs/benefits_loan.csv", "r");
 
 	$lown = array(
 			'table_name' => '',
@@ -381,6 +391,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -399,7 +411,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/benefits_bonus.csv", "r");
+	$file = fopen("$hris_csvs/benefits_bonus.csv", "r");
 
 	$bownus = array(
 			'table_name' => '',
@@ -433,6 +445,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -451,7 +465,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/deductions.csv", "r");
+	$file = fopen("$hris_csvs/deductions.csv", "r");
 
 	$dedaksyons = array(
 			'table_name' => '',
@@ -485,6 +499,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -504,7 +520,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/deductions_tax.csv", "r");
+	$file = fopen("$hris_csvs/deductions_tax.csv", "r");
 
 	$takses = array(
 			'table_name' => '',
@@ -588,6 +604,8 @@
 
 		$cnt += 1;
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -606,7 +624,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/deductions_loan.csv", "r");
+	$file = fopen("$hris_csvs/deductions_loan.csv", "r");
 
 	$lown = array(
 			'table_name' => '',
@@ -640,6 +658,8 @@
 			}
 		}
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
@@ -659,7 +679,7 @@
 		}
 	}
 
-	$file = fopen("./hris-csv/employees.csv", "r");
+	$file = fopen("$hris_csvs/employees.csv", "r");
 
 	$employis = array(
 			'table_name' => '',
@@ -740,6 +760,8 @@
 
 		$cnt += 1;
 	}
+
+	fclose($file);
 	/////////////////////////////////////////////////////////
 
 
