@@ -1,0 +1,2 @@
+table_name,py_deductions
+fields,deduction_id,deduction_name,deduction_total_amount

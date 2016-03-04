@@ -19,6 +19,9 @@
 
 	// HRIS CUBE!!!
 
+	$datum = array();
+
+	/////////////////////////////////////////////////////////
 	// dimension 1 (income)
 	$hris_income = array();
 	$existing = array();
@@ -32,9 +35,30 @@
 			}
 		}
 	}
-
-	$sql = "SELECT `income_id`, `income_name`, `income_amount` FROM `py_income`";
 	
+	$file = fopen("./hris-csv/income.csv", "r");
+
+	$inkam = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+	
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$inkam['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($inkam['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	fclose($file);
+
+	$sql = sqlSelect($inkam, '1');
+
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
 			while($row = mysqli_fetch_array($result)){
@@ -48,8 +72,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 1.1 (overtime)
 	$hris_income_overtime = array();
 	$existing = array();
@@ -64,7 +90,26 @@
 		}
 	}
 
-	$sql = "SELECT `overtime_id`, `overtime_dates` FROM `py_overtime_dates`";
+	$file = fopen("./hris-csv/income_overtime.csv", "r");
+
+	$obertaym = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$obertaym['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 0; $i < count($line); $i++) {
+				array_push($obertaym['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($obertaym, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -78,8 +123,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 1.2 (salary grade)
 	$hris_income_salary_grade = array();
 	$existing = array();
@@ -94,7 +141,26 @@
 		}
 	}
 
-	$sql = "SELECT `salary_id`, `salary_name`, `basic_salary` FROM `tm_salary_grade`";
+	$file = fopen("./hris-csv/income_salary_grade.csv", "r");
+
+	$salari = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$salari['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($salari['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($salari, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -109,8 +175,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2 (benefits)
 	$hris_benefits = array();
 	$existing = array();
@@ -125,7 +193,26 @@
 		}
 	}
 
-	$sql = "SELECT `benefits_id`, `benefits_name`, `benefits_amount` FROM `tm_benefits`";
+	$file = fopen("./hris-csv/benefits.csv", "r");
+
+	$benepits = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$benepits['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 0; $i < count($line); $i++) {
+				array_push($benepits['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($benepits, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -140,8 +227,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.1 (leave)
 	$hris_benefits_leave = array();
 	$leave_type_ids = array();
@@ -157,7 +246,32 @@
 		}
 	}
 
-	$sql = "SELECT `leave_id`, `leave_name`, `start_date`, `end_date`, `leave_type_id` FROM `py_leave`";
+	$file = fopen("./hris-csv/benefits_leave.csv", "r");
+
+	$lib = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt < 2){
+			if($line[0] === 'table_name'){
+				$lib['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($lib['fields'], "`" . $line[$i] . "`");
+				}
+			}
+		}		
+
+		$cnt += 1;
+	}
+
+	$sql = sqlSelect($lib, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -176,10 +290,33 @@
 		}
 	}
 
+	$lib = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt >= 2){
+			if($line[0] === 'table_name'){
+				$lib['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($lib['fields'], "`" . $line[$i] . "`");
+				}
+			}
+		}		
+
+		$cnt += 1;
+	}
+
 	$cnt = 0;
 
 	foreach($leave_type_ids as $id){
-		$sql = "SELECT `leave_type_name`, `leave_type_convert` FROM `py_leave_type` WHERE `leave_type_id`='$id'";
+		$sql = sqlSelect($lib, "`leave_type_id`='$id'");
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -192,8 +329,10 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.2 (loan)
 	$hris_benefits_loan = array();
 	$existing = array();
@@ -208,7 +347,26 @@
 		}
 	}
 
-	$sql = "SELECT `loan_id`, `loan_name`, `loan_total` FROM `py_loan`";
+	$file = fopen("./hris-csv/benefits_loan.csv", "r");
+
+	$lown = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$lown['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($lown['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($lown, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -223,8 +381,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 2.3 (bonus)
 	$hris_benefits_bonus = array();
 	$existing = array();
@@ -239,7 +399,26 @@
 		}
 	}
 
-	$sql = "SELECT `bonus_id`, `bonus_name`, `bonus_amount` FROM `py_bonus`";
+	$file = fopen("./hris-csv/benefits_bonus.csv", "r");
+
+	$bownus = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$bownus['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($bownus['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($bownus, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -254,8 +433,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3 (deductions)
 	$hris_deductions = array();
 	$existing = array();
@@ -270,7 +451,26 @@
 		}
 	}
 
-	$sql = "SELECT `deduction_id`, `deduction_name`, `deduction_total_amount` FROM `py_deductions`";
+	$file = fopen("./hris-csv/deductions.csv", "r");
+
+	$dedaksyons = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$dedaksyons['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($dedaksyons['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($dedaksyons, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -285,8 +485,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3.1 (taxes)
 	$hris_deductions_taxes = array();
 	$tax_ids = array();
@@ -302,7 +504,32 @@
 		}
 	}
 
-	$sql = "SELECT `tax_range_id`, `sal_start`, `sal_end`, `percent`, `plus` FROM `py_tax_range`";
+	$file = fopen("./hris-csv/deductions_tax.csv", "r");
+
+	$takses = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt < 2){
+			if($line[0] === 'table_name'){
+				$takses['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($takses['fields'], "`" . $line[$i] . "`");
+				}
+			}			
+		}
+
+		$cnt += 1;
+	}
+
+	$sql = sqlSelect($takses, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -322,10 +549,33 @@
 		}
 	}
 
+	$takses = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt >= 2){
+			if($line[0] === 'table_name'){
+				$takses['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($takses['fields'], "`" . $line[$i] . "`");
+				}
+			}
+		}
+
+		$cnt += 1;
+	}
+
 	$cnt = 0;
 
 	foreach($tax_ids as $id){
-		$sql = "SELECT `civil_status`, `dependent_number` FROM `py_tax` WHERE `tax_id`='$id'";
+		$sql = sqlSelect($takses, "`tax_id`='$id'");
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -338,8 +588,10 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 3.2 (loans)
 	$hris_deductions_loans = array();
 	$existing = array();
@@ -354,7 +606,26 @@
 		}
 	}
 
-	$sql = "SELECT `loan_id`, `loan_name`, `loan_total` FROM `py_loan`";
+	$file = fopen("./hris-csv/deductions_loan.csv", "r");
+
+	$lown = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($line[0] === 'table_name'){
+			$lown['table_name'] = "`" . $line[1] . "`";
+		} else{
+			for ($i = 1; $i < count($line); $i++) { 
+				array_push($lown['fields'], "`" . $line[$i] . "`");
+			}
+		}
+	}
+
+	$sql = sqlSelect($lown, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -369,8 +640,10 @@
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////
 
 
+	/////////////////////////////////////////////////////////
 	// dimension 4 (employees)
 	$hris_employees = array();
 	$employee_ids = array();
@@ -386,7 +659,32 @@
 		}
 	}
 
-	$sql = "SELECT `emp_id`, `contract_start`, `contract_end`, `emp_type_id` FROM `py_loan`";
+	$file = fopen("./hris-csv/employees.csv", "r");
+
+	$employis = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt < 2){
+			if($line[0] === 'table_name'){
+				$employis['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($employis['fields'], "`" . $line[$i] . "`");
+				}
+			}
+		}
+
+		$cnt += 1;
+	}
+
+	$sql = sqlSelect($employis, '1');
 
 	if($result = mysqli_query($conn, $sql)){
 		if(mysqli_num_rows($result) > 0){
@@ -404,10 +702,33 @@
 		}
 	}
 
+	$employis = array(
+			'table_name' => '',
+			'fields' => array()
+		);
+
+	$cnt = 0;
+
+	while(!feof($file)){
+		$line = fgetcsv($file);
+
+		if($cnt >= 2){
+			if($line[0] === 'table_name'){
+				$inkam['table_name'] = "`" . $line[1] . "`";
+			} else{
+				for ($i = 1; $i < count($line); $i++) { 
+					array_push($inkam['fields'], "`" . $line[$i] . "`");
+				}
+			}
+		}
+
+		$cnt += 1;
+	}
+
 	$cnt = 0;
 
 	foreach($employee_ids as $id){
-		$sql = "SELECT `emp_type_name` FROM `tm_employee_type` WHERE `emp_type_id`='$id'";
+		$sql = sqlSelect($employis, "`emp_type_id`='$id'");
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -419,171 +740,37 @@
 
 		$cnt += 1;
 	}
+	/////////////////////////////////////////////////////////
 
 
 	mysqli_close($conn);
 
+	// save sa session lahat ng na extract na data
 
+	session_start();
 
-	// insert na ng values
+	$_SESSION['hris_benefits'] = $hris_benefits;
+	$_SESSION['hris_benefits_bonus'] = $hris_benefits_bonus;
+	$_SESSION['hris_benefits_leave'] = $hris_benefits_leave;
+	$_SESSION['hris_benefits_loan'] = $hris_benefits_loan;
+	$_SESSION['hris_deductions'] = $hris_deductions;
+	$_SESSION['hris_benefits_bonus'] = $hris_benefits_bonus;
+	$_SESSION['hris_deductions_loans'] = $hris_deductions_loans;
+	$_SESSION['hris_deductions_taxes'] = $hris_deductions_taxes;
+	$_SESSION['hris_employees'] = $hris_employees;
+	$_SESSION['hris_income'] = $hris_income;
+	$_SESSION['hris_income_overtime'] = $hris_income_overtime;
+	$_SESSION['hris_income_salary_grade'] = $hris_income_salary_grade;
 
-	$db_name = 'datawarehouse';
+	// end extraction
 
-	$conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
+	echo "Data EXTRACTION Successful!";
+?>
 
-
-	// Check connection
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
+<?php
+	function sqlSelect($dimension, $condition){
+		return "SELECT " . join($dimension['fields'], ', ') . " FROM " . $dimension['table_name'] . " WHERE $condition";
 	}
-
-	foreach ($hris_benefits as $benefit) {
-		$sql = "INSERT INTO `hris_benefits` (`id`, `name`, `amount`) VALUES('" . $benefit['id'] . "', '" . $benefit['name'] . "', " . $benefit['amount'] . ")";
-
-		echo "BENEFITS: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits success";
-		} else{
-			echo "benefits failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_benefits_bonus as $bonus) {
-		$sql = "INSERT INTO `hris_benefits_bonus` (`id`, `name`, `amount`) VALUES('" . $bonus['id'] . "', '" . $bonus['name'] . "', " . $bonus['amount'] . ")";
-
-		echo "BENEFITS BONUS: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits bonus success";
-		} else{
-			echo "benefits bonus failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_benefits_leave as $leave) {
-		$sql = "INSERT INTO `hris_benefits_leave` (`id`, `start_date`, `end_date`, `leave_type`, `name`, `leave_type_convert`) VALUES('" . $leave['id'] . "', '" . $leave['start_date'] . "', '" . $leave['end_date'] . "', '" . $leave['leave_type'] . "', '" . $leave['name'] . "', '" . $leave['leave_type_convert'] . "')";
-
-		echo "BENEFITS LEAVE: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits leave success";
-		} else{
-			echo "benefits leave failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_benefits_loan as $loan) {
-		$sql = "INSERT INTO `hris_benefits_loan` (`id`, `name`, `total`) VALUES('" . $loan['id'] . "', '" . $loan['name'] . "', " . $loan['total'] . ")";
-
-		echo "BENEFITS LOAN: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits loan success";
-		} else{
-			echo "benefits loan failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_deductions as $deduction) {
-		$sql = "INSERT INTO `hris_benefits_deductions` (`id`, `name`, `amount`) VALUES('" . $deduction['id'] . "', '" . $deduction['name'] . "', " . $deduction['amount'] . ")";
-
-		echo "DEDUCTIONS: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "deductions success";
-		} else{
-			echo "deductions failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_benefits_bonus as $bonus) {
-		$sql = "INSERT INTO `hris_benefits_bonus` (`id`, `name`, `amount`) VALUES('" . $bonus['id'] . "', '" . $bonus['name'] . "', " . $bonus['amount'] . ")";
-
-		echo "BENEFITS BONUS: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits bonus success";
-		} else{
-			echo "benefits bonus failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_deductions_loans as $loan) {
-		$sql = "INSERT INTO `hris_deductions_loan` (`id`, `name`, `total`) VALUES('" . $loan['id'] . "', '" . $loan['name'] . "', " . $loan['total'] . ")";
-
-		echo "DEDUCTIONS LOAN: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "deductions loan success";
-		} else{
-			echo "deductions loan failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_deductions_taxes as $tax) {
-		$sql = "INSERT INTO `hris_deductions_tax` (`id`, `civil_status`, `dependent_number`, `range_salary_start`, `range_salary_end`, `range_percent`, `range_plus`) VALUES('" . $tax['id'] . "', '" . $tax['civil_status'] . "', " . $tax['dependent_number'] . ", " . $tax['range_salary_start'] . ", " . $tax['range_salary_end'] . ", " . $tax['range_percent'] . ", " . $tax['range_plus'] . ")";
-
-		echo "employees: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "deductions taxes success";
-		} else{
-			echo "deductions taxes failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_employees as $employee) {
-		$sql = "INSERT INTO `hris_employees` (`id`, `start_contract`, `end_contract`, `employee_type`) VALUES('" . $employee['id'] . "', '" . $employee['start_contract'] . "', '" . $employee['end_contract'] . "', '" . $employee['employee_type'] . "')";
-
-		echo "EMPLOYEES: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "employees success";
-		} else{
-			echo "employees failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_income as $income) {
-		$sql = "INSERT INTO `hris_income` (`id`, `name`, `amount`) VALUES('" . $income['id'] . "', '" . $income['name'] . "', " . $income['amount'] . ")";
-
-		echo "INCOME: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "income success";
-		} else{
-			echo "income failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_income_overtime as $overtime) {
-		$sql = "INSERT INTO `hris_income_overtime` (`id`, `date_time`) VALUES('" . $overtime['id'] . "', '" . $overtime['date_time'] . ")";
-
-		echo "INCOME OVERTIME: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "income overtime success";
-		} else{
-			echo "income overtime failed: " . mysqli_error($conn);
-		}
-	}
-
-	foreach ($hris_income_salary_grade as $salary) {
-		$sql = "INSERT INTO `hris_income_salary_grade` (`id`, `name`, `basic_salary`) VALUES('" . $salary['id'] . "', '" . $salary['name'] . "', " . $salary['basic_salary'] . ")";
-
-		echo "INCOME BASIC SALARY: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "income basic salary success";
-		} else{
-			echo "income basic salary failed: " . mysqli_error($conn);
-		}
-	}
-
-	mysqli_close($conn);
-
-	echo "HRIS Data Extraction Successful!";
 ?>
 
 <div>

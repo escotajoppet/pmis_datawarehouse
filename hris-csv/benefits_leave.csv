@@ -1,0 +1,4 @@
+table_name,py_leave
+fields,leave_id,leave_name,start_date,end_date,leave_type_id
+table_name,py_leave_type
+fields,leave_type_name,leave_type_convert
