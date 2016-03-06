@@ -1,2 +1,2 @@
-table_name,py_deductions
-fields,deduction_id,deduction_name,deduction_total_amount
+table_name,py_deduction
+fields,deduction_id,deduction_name,deduction_amount_total

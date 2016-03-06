@@ -1,4 +1,4 @@
 table_name,py_tax_range
-fields,tax_range_id,sal_start,sal_end,percent,plus
+fields,tax_range_id,sal_start,sal_end,percent,plus,tax_id
 table_name,py_tax
 fields,civil_status,dependent_number

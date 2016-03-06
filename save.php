@@ -1,169 +1,256 @@
-<?php
-	// HRIS DATABASE CONNECTION
-	$db_host = 'localhost';
-	$db_username = 'root';
-	$db_passwd = 'root';
-	$db_name = 'datawarehouse';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Data Warehouse | SAVE</title>
+</head>
+<body>
+	<h4>Data Warehouse | SAVE</h4>
 
-	$conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
+	<?php
+		// HRIS DATABASE CONNECTION
+		$db_host = 'localhost';
+		$db_username = 'root';
+		$db_passwd = 'root';
+		$db_name = 'datawarehouse';
+
+		$conn = mysqli_connect($db_host, $db_username, $db_passwd, $db_name);
 
 
-	// Check connection
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	}
-
-	session_start();
-
-	foreach ($_SESSION['hris_benefits'] as $benefit) {
-		$sql = "INSERT INTO `hris_benefits` (`id`, `name`, `amount`) VALUES('" . $benefit['id'] . "', '" . $benefit['name'] . "', " . $benefit['amount'] . ")";
-
-		echo "BENEFITS: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits success";
-		} else{
-			echo "benefits failed: " . mysqli_error($conn);
+		// Check connection
+		if ($conn->connect_error) {
+		    die("Connection failed: " . $conn->connect_error);
 		}
-	}
 
-	foreach ($_SESSION['hris_benefits_bonus'] as $bonus) {
-		$sql = "INSERT INTO `hris_benefits_bonus` (`id`, `name`, `amount`) VALUES('" . $bonus['id'] . "', '" . $bonus['name'] . "', " . $bonus['amount'] . ")";
+		session_start();
 
-		echo "BENEFITS BONUS: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "benefits bonus success";
-		} else{
-			echo "benefits bonus failed: " . mysqli_error($conn);
+		foreach ($_SESSION['hris_benefits'] as $benefit) {
+			$sql = "INSERT INTO `hris_benefits` (`id`, `name`, `amount`) VALUES('" . $benefit['id'] . "', '" . $benefit['name'] . "', " . $benefit['amount'] . ")";
+
+			echo "BENEFITS: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
 		}
-	}
 
-	foreach ($_SESSION['hris_benefits_leave'] as $leave) {
-		$sql = "INSERT INTO `hris_benefits_leave` (`id`, `start_date`, `end_date`, `leave_type`, `name`, `leave_type_convert`) VALUES('" . $leave['id'] . "', '" . $leave['start_date'] . "', '" . $leave['end_date'] . "', '" . $leave['leave_type'] . "', '" . $leave['name'] . "', '" . $leave['leave_type_convert'] . "')";
-
-		echo "BENEFITS LEAVE: $sql\n\n";
-
-		if(mysqli_query($conn, $sql)){
-			echo "benefits leave success";
+		if($success){
+			echo "BENEFITS Success...";
 		} else{
-			echo "benefits leave failed: " . mysqli_error($conn);
+			echo "BENEFITS failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_benefits_loan'] as $loan) {
-		$sql = "INSERT INTO `hris_benefits_loan` (`id`, `name`, `total`) VALUES('" . $loan['id'] . "', '" . $loan['name'] . "', " . $loan['total'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "BENEFITS LOAN: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "benefits loan success";
+		foreach ($_SESSION['hris_benefits_bonus'] as $bonus) {
+			$sql = "INSERT INTO `hris_benefits_bonus` (`id`, `name`, `amount`) VALUES('" . $bonus['id'] . "', '" . $bonus['name'] . "', " . $bonus['amount'] . ")";
+
+			echo "BENEFITS BONUS: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "BENEFITS BONUS Success...";
 		} else{
-			echo "benefits loan failed: " . mysqli_error($conn);
+			echo "BENEFITS BONUS failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_deductions'] as $deduction) {
-		$sql = "INSERT INTO `hris_benefits_deductions` (`id`, `name`, `amount`) VALUES('" . $deduction['id'] . "', '" . $deduction['name'] . "', " . $deduction['amount'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "DEDUCTIONS: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "deductions success";
+		foreach ($_SESSION['hris_benefits_leave'] as $leave) {
+			$sql = "INSERT INTO `hris_benefits_leave` (`id`, `start_date`, `end_date`, `leave_type`, `name`, `leave_type_convert`) VALUES('" . $leave['id'] . "', '" . $leave['start_date'] . "', '" . $leave['end_date'] . "', '" . $leave['leave_type'] . "', '" . $leave['name'] . "', '" . $leave['leave_type_convert'] . "')";
+
+			echo "BENEFITS LEAVE: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "BENEFITS LEAVE Success...";
 		} else{
-			echo "deductions failed: " . mysqli_error($conn);
+			echo "BENEFITS LEAVE failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_benefits_bonus'] as $bonus) {
-		$sql = "INSERT INTO `hris_benefits_bonus` (`id`, `name`, `amount`) VALUES('" . $bonus['id'] . "', '" . $bonus['name'] . "', " . $bonus['amount'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "BENEFITS BONUS: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "benefits bonus success";
+		foreach ($_SESSION['hris_benefits_loan'] as $loan) {
+			$sql = "INSERT INTO `hris_benefits_loan` (`id`, `total`) VALUES('" . $loan['id'] . "', " . $loan['total'] . ")";
+
+			echo "BENEFITS LOAN: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "BENEFITS LOAN Success...";
 		} else{
-			echo "benefits bonus failed: " . mysqli_error($conn);
+			echo "BENEFITS LOAN failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_deductions_loans'] as $loan) {
-		$sql = "INSERT INTO `hris_deductions_loan` (`id`, `name`, `total`) VALUES('" . $loan['id'] . "', '" . $loan['name'] . "', " . $loan['total'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "DEDUCTIONS LOAN: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "deductions loan success";
+		foreach ($_SESSION['hris_deductions'] as $deduction) {
+			$sql = "INSERT INTO `hris_deductions` (`id`, `name`, `amount`) VALUES('" . $deduction['id'] . "', '" . $deduction['name'] . "', " . $deduction['total_amount'] . ")";
+
+			echo "DEDUCTIONS: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "DEDUCTIONS Success...";
 		} else{
-			echo "deductions loan failed: " . mysqli_error($conn);
+			echo "DEDUCTIONS failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_deductions_taxes'] as $tax) {
-		$sql = "INSERT INTO `hris_deductions_tax` (`id`, `civil_status`, `dependent_number`, `range_salary_start`, `range_salary_end`, `range_percent`, `range_plus`) VALUES('" . $tax['id'] . "', '" . $tax['civil_status'] . "', " . $tax['dependent_number'] . ", " . $tax['range_salary_start'] . ", " . $tax['range_salary_end'] . ", " . $tax['range_percent'] . ", " . $tax['range_plus'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "employees: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "deductions taxes success";
+		foreach ($_SESSION['hris_deductions_loans'] as $loan) {
+			$sql = "INSERT INTO `hris_deductions_loan` (`id`, `total`) VALUES('" . $loan['id'] . "', " . $loan['total'] . ")";
+
+			echo "DEDUCTIONS LOAN: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "DEDUCTIONS LOAN Success...";
 		} else{
-			echo "deductions taxes failed: " . mysqli_error($conn);
+			echo "DEDUCTIONS LOAN failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_employees'] as $employee) {
-		$sql = "INSERT INTO `hris_employees` (`id`, `start_contract`, `end_contract`, `employee_type`) VALUES('" . $employee['id'] . "', '" . $employee['start_contract'] . "', '" . $employee['end_contract'] . "', '" . $employee['employee_type'] . "')";
+		echo "<br><br><br><br><br>";
 
-		echo "EMPLOYEES: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "employees success";
+		foreach ($_SESSION['hris_deductions_taxes'] as $tax) {
+			$sql = "INSERT INTO `hris_deductions_tax` (`id`, `civil_status`, `dependent_number`, `range_salary_start`, `range_salary_end`, `range_percent`, `range_plus`) VALUES('" . $tax['id'] . "', '" . $tax['civil_status'] . "', " . $tax['dependent_number'] . ", " . $tax['range_salary_start'] . ", " . $tax['range_salary_end'] . ", " . $tax['range_percent'] . ", " . $tax['range_plus'] . ")";
+
+			echo "DEDUCTIONS TAX: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "DEDUCTIONS TAX Success...";
 		} else{
-			echo "employees failed: " . mysqli_error($conn);
+			echo "DEDUCTIONS TAX failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_income'] as $income) {
-		$sql = "INSERT INTO `hris_income` (`id`, `name`, `amount`) VALUES('" . $income['id'] . "', '" . $income['name'] . "', " . $income['amount'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "INCOME: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "income success";
+		foreach ($_SESSION['hris_employees'] as $employee) {
+			$sql = "INSERT INTO `hris_employees` (`id`, `contract_start`, `contract_end`, `employee_type`) VALUES('" . $employee['id'] . "', '" . $employee['contract_start'] . "', '" . $employee['contract_end'] . "', '" . $employee['employee_type'] . "')";
+
+			echo "EMPLOYEES: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "EMPLOYEES Success...";
 		} else{
-			echo "income failed: " . mysqli_error($conn);
+			echo "EMPLOYEES failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_income_overtime'] as $overtime) {
-		$sql = "INSERT INTO `hris_income_overtime` (`id`, `date_time`) VALUES('" . $overtime['id'] . "', '" . $overtime['date_time'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "INCOME OVERTIME: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "income overtime success";
+		foreach ($_SESSION['hris_income'] as $income) {
+			$sql = "INSERT INTO `hris_income` (`id`, `name`, `amount`) VALUES('" . $income['id'] . "', '" . $income['name'] . "', " . $income['amount'] . ")";
+
+			echo "INCOME: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "INCOME Success...";
 		} else{
-			echo "income overtime failed: " . mysqli_error($conn);
+			echo "INCOME failed: " . mysqli_error($conn);
 		}
-	}
 
-	foreach ($_SESSION['hris_income_salary_grade'] as $salary) {
-		$sql = "INSERT INTO `hris_income_salary_grade` (`id`, `name`, `basic_salary`) VALUES('" . $salary['id'] . "', '" . $salary['name'] . "', " . $salary['basic_salary'] . ")";
+		echo "<br><br><br><br><br>";
 
-		echo "INCOME BASIC SALARY: $sql\n\n";
+		$success = false;
 
-		if(mysqli_query($conn, $sql)){
-			echo "income basic salary success";
+		foreach ($_SESSION['hris_income_overtime'] as $overtime) {
+			$sql = "INSERT INTO `hris_income_overtime` (`id`, `date_time`) VALUES('" . $overtime['id'] . "', '" . $overtime['date_time'] . "')";
+
+			echo "INCOME OVERTIME: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "INCOME OVERTIME Success...";
 		} else{
-			echo "income basic salary failed: " . mysqli_error($conn);
+			echo "INCOME OVERTIME failed: " . mysqli_error($conn);
 		}
-	}
 
-	mysqli_close($conn);
+		echo "<br><br><br><br><br>";
 
-	echo "Data SAVING Successful!";
-?>
+		$success = false;
 
-<div>
-	<button type="button" onclick="window.location.href='/pmis/datawarehouse/load.php'" style="margin-top:15px;">LOAD DASHBOARD</button>
-</div>
+		foreach ($_SESSION['hris_income_salary_grade'] as $salary) {
+			$sql = "INSERT INTO `hris_income_salary_grade` (`id`, `name`, `basic_salary`) VALUES('" . $salary['id'] . "', '" . $salary['name'] . "', " . $salary['basic_salary'] . ")";
+
+			echo "INCOME BASIC SALARY: $sql <br><br>";
+
+			if(mysqli_query($conn, $sql)){
+				$success = true;
+			}
+		}
+
+		if($success){
+			echo "INCOME BASIC SALARY Success...";
+		} else{
+			echo "INCOME BASIC SALARY failed: " . mysqli_error($conn);
+		}
+
+		echo "<br><br><br><br><br>";
+
+		mysqli_close($conn);
+
+		echo "Data SAVING Successful!";
+	?>
+
+	<div>
+		<button type="button" onclick="window.location.href='/pmis/datawarehouse/load.php'" style="margin-top:15px;">LOAD DASHBOARD</button>
+	</div>
+</body>
+</html>
