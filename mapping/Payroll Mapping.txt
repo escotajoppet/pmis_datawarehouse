@@ -1,0 +1,39 @@
+HRIS Cube:
+	Payroll
+		payroll_id - py_payroll.py_id
+		employee_id - py_payroll.emp_id
+			salary_id - tm_employee.salary_id
+				basic_salary - tm_salary_grade.basic_salary
+		tax_range_id - py_payroll.tax_range_id
+			salary_start - py_tax_range.sal_start
+			salary_end - py_tax_range.sal_end
+			percent - py_tax_range.percent
+			tax_id - py_tax_range.tax_id
+				civil_status - py_tax.civil_status
+				dependent_number - py_tax.dependent_number
+		basic_salary - py_payroll.current_basic_salary
+		pay_date - py_payroll.pay_date
+		period_id - py_payroll.period_id
+			start_date - py_payroll_period.startdate
+			end_date - py_payroll_period.enddate
+			status - py_payroll.period.status
+
+	Deduction
+		payroll_deduction_id - py_payroll_deduction.py_deduction_id
+		deduction_id - py_payroll_deduction.deduction_id
+			deduction_amount_total - py_deduction.deduction_amount_total
+		payroll_id - py_payroll_deduction.py_id
+
+	Bonus
+		payroll_bonus_id - py_payroll_bonus.py_bonus_id
+		bonus_id - py_payroll_deduction.bonus_id
+			bonus_amount - py_bonus.bonus_amount
+		payroll_id - py_payroll_deduction.py_id
+
+
+payroll
+basic salary
+tax percent
+civil status
+dependent number
+date

@@ -1,0 +1,4 @@
+table_name,py_payroll_deduction
+fields,py_deduction_id,deduction_id,py_id
+table_name,py_deduction
+fields,deduction_amount_total

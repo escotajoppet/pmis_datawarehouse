@@ -33,6 +33,12 @@
 
 						$new_x = number_format($tmp_x, 2, '.', '');
 						$_SESSION[$key][$i][$w] = $new_x;
+					} elseif(strpos($w, 'percent') !== false){
+						$salary = floatval($_SESSION[$key][$i]['basic_salary']);
+						$percent = floatval($x) * 0.01;
+						$prod = $salary * $percent;
+
+						$_SESSION[$key][$i][$w] = $prod;
 					} else{
 						$_SESSION[$key][$i][$w] = ucfirst($old_val);
 					}
@@ -50,14 +56,3 @@
 	</div>
 </body>
 </html>
-
-<!-- income ==> id,name,amount <br>
-overtime ==> id,datetime <br>
-salarygrade ==> id,name,basicsalary <br>
-benefits ==> id,name,amount <br>
-leave ==> id,name,startdate,enddate,leavetype,leavetypeconvert <br>
-loan ==> id,name,total <br>
-bonus ==> id,name,amount <br>
-deductions ==> id,name,totalamount <br>
-tax ==> id,rangesalarystart,rangesalaryend,rangepercent,rangeplus,civilstatus,dependentnumber <br>
-employees ==> id,contractstart,contractend,employeetype <br> -->

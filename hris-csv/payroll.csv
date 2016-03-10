@@ -1,0 +1,6 @@
+table_name,py_payroll
+fields,py_id,current_basic_salary,pay_date,tax_range_id
+table_name,py_tax_range
+fields,tax_id,percent
+table_name,py_tax
+fields,civil_status,dependent_number

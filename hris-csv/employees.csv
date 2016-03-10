@@ -1,4 +1,0 @@
-table_name,tm_employee
-fields,emp_id,contract_start,contract_end,emp_type_id
-table_name,tm_employee_type
-fields,emp_type_name

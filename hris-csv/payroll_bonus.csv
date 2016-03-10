@@ -1,0 +1,4 @@
+table_name,py_payroll_bonus
+fields,py_bonus_id,bonus_id,py_id
+table_name,py_bonus
+fields,bonus_amount
