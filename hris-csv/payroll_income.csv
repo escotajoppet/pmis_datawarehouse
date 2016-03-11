@@ -1,0 +1,4 @@
+table_name,py_payroll_income
+fields,py_income_id,income_id,py_id
+table_name,py_income
+fields,income_name,income_amount

@@ -37,18 +37,46 @@
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
 				while($row = mysqli_fetch_array($result)){
-					$deduction_data[$row['payroll_id']] = array();
-					array_push($deduction_data[$row['payroll_id']], $row['bonus_amount']);
+					$bonus_data[$row['payroll_id']] = array();
+					array_push($bonus_data[$row['payroll_id']], $row['bonus_amount']);
 				}
 			}
 		}
 
-		$salary_data = array(
-				'salaries' => array(),
+		$benefit_data = array();
+
+		$sql = "SELECT `benefits_amount`, `payroll_id` FROM `hris_payroll_benefit`";
+
+		if($result = mysqli_query($conn, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					$benefit_data[$row['payroll_id']] = array();
+					array_push($benefit_data[$row['payroll_id']], $row['benefits_amount']);
+				}
+			}
+		}
+
+		$income_data = array();
+
+		$sql = "SELECT `income_amount`, `payroll_id` FROM `hris_payroll_income`";
+
+		if($result = mysqli_query($conn, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					$income_data[$row['payroll_id']] = array();
+					array_push($income_data[$row['payroll_id']], $row['income_amount']);
+				}
+			}
+		}
+
+		$payroll_data = array(
+				'salary' => array(),
 				'tax' => array(),
 				'dates' => array(),
 				'deduction' => array(),
-				'bonus' => array()
+				'bonus' => array(),
+				'benefit' => array(),
+				'income' => array()
 			);
 
 		$sql = "SELECT `id`, `basic_salary`, `date`, `tax` FROM `hris_payroll`";
@@ -56,15 +84,17 @@
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
 				while($row = mysqli_fetch_array($result)){
-					array_push($salary_data['salaries'], $row['basic_salary']);
-					array_push($salary_data['tax'], $row['tax']);
-					array_push($salary_data['dates'], $row['date']);
-					if(array_key_exists($row['id'], $deduction_data)){
-						array_push($salary_data['deduction'], $deduction_data[$row['id']]);
-					}
-					if(array_key_exists($row['id'], $bonus_data)){
-						array_push($salary_data['bonu'], $deduction_data[$row['id']]);
-					}
+					array_push($payroll_data['salary'], $row['basic_salary']);
+					array_push($payroll_data['tax'], $row['tax']);
+					array_push($payroll_data['dates'], $row['date']);
+
+					if(array_key_exists($row['id'], $deduction_data)) array_push($payroll_data['deduction'], $deduction_data[$row['id']]);
+
+					if(array_key_exists($row['id'], $bonus_data)) array_push($payroll_data['bonus'], $bonus_data[$row['id']]);
+
+					if(array_key_exists($row['id'], $benefit_data)) array_push($payroll_data['benefit'], $benefit_data[$row['id']]);
+
+					if(array_key_exists($row['id'], $income_data)) array_push($payroll_data['income'], $income_data[$row['id']]);
 				}
 			}
 		}
@@ -88,12 +118,12 @@
 		<input type="submit" name="submit" value="Set View">
 	</form>
 
-	<div id="hris-chart-container" style="height: 400px; width: 100%;"></div>
+	<div id="hris-chart-container" style="height: 800px; width: 100%;"></div>
 
 	<div id="lgu-chart-container" style="height: 300px; width: 100%; margin-top: 50px;"></div>
 	
 	<script type="text/javascript">
-		var datum = <?php echo json_encode($salary_data); ?>;
+		var datum = <?php echo json_encode($payroll_data); ?>;
 		var view = <?php echo json_encode($view); ?>
 	</script>
 	<script type="text/javascript" src="./js/generate_chart.js"></script>

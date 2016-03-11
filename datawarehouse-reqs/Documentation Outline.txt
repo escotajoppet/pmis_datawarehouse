@@ -1,0 +1,56 @@
+Part 1 - Scoping
+
+A.  Project Summary
+B.  Data Model
+    Core System
+    Integration
+    Interim
+C.  Business Requirements for the Data Warehouse	
+    Executive Overview	
+    Project Objectives	
+    Project Scope	
+
+
+Part 2 - Requirements and Strategies	
+
+A.  List of Analytical Reports	
+B.  Assessment of the Source Database
+C.  Extraction Strategy
+D.  Transformation Strategy	
+E.  Loading Strategy	
+F.  Problems/Requirements List
+
+
+Part 3 - DW Design	
+
+A.  DW Architecture
+A.1 Technology Strategy	
+A.2 Physical Architecture
+B.  DW Data Model and Data Dictionary	
+    Data Model	
+    Data Dictionary - Staging Layer	
+    Data Dictionary - Presentation Layer	
+C.  Test Specifications	
+    Real Life Simple Scenarios	
+    Real Life complex scenarios	
+    Boundary Testing	
+    Negative Testing	
+    Full Production Simulation  
+
+
+Part 4 – Findings	
+
+A.	Test Results
+A.1 Extraction
+A.2 Transformation	
+A.3 Loading	
+A.4 Analytical Reports	
+
+
+Part 5 – Conclusion and Recommendation	
+
+A.1 Extraction	
+A.2 Transformation	
+A.3 Loading	
+A.4 Analytical Reports	
+A.5 Actual Reports and SQL

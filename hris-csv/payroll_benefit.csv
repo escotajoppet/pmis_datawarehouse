@@ -1,0 +1,4 @@
+table_name,py_payroll_benefits
+fields,py_benefits_id,benefits_id,py_id
+table_name,tm_benefits
+fields,benefits_name,benefits_amount

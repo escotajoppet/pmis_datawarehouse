@@ -1,9 +1,4 @@
 window.onload = function(){
-	var salary_points = [];
-	var tax_points = [];
-	var bonus_points = [];
-	var deduction_points = [];
-
 	var x_interval = null;
 	var x_interval_type = null;
 	var x_angle = null
@@ -36,44 +31,124 @@ window.onload = function(){
       break;
 	}
 
+	var total_salary = new Object();
+	var total_bonus = new Object();
+	var total_benefit = new Object();
+	var total_income = new Object();
+	var total_deduction = new Object();
+	var total_tax = new Object();
+
 	for(var i = 0; i < datum['dates'].length; i++){
-		salari = isNaN(datum['salaries'][i]) ? 0 : parseFloat(datum['salaries'][i]);
+		var date = new Date(datum['dates'][i]);
+		var date_str = formatDate(date);
+
+		salari = isNaN(datum['salary'][i]) ? 0 : parseFloat(datum['salary'][i]);
+
+		if(total_salary[date_str] === undefined){
+			total_salary[date_str] = salari;
+		} else{
+			total_salary[date_str] += salari;
+		}
+
+		var taks = isNaN(datum['tax'][i]) ? 0 : parseFloat(datum['tax'][i]);
+
+		if(total_tax[date_str] === undefined){
+			total_tax[date_str] = taks;
+		} else{
+			total_tax[date_str] += taks;
+		}
+
+		var bownus = isNaN(datum['bonus'][i]) ? 0 : parseFloat(datum['bonus'][i]);
+
+		if(total_bonus[date_str] === undefined){
+			total_bonus[date_str] = bownus;
+		} else{
+			total_bonus[date_str] += bownus;
+		}
+
+		var dedaksyon = isNaN(datum['deduction'][i]) ? 0 : parseFloat(datum['deduction'][i]);
+
+		if(total_deduction[date_str] === undefined){
+			total_deduction[date_str] = dedaksyon;
+		} else{
+			total_deduction[date_str] += dedaksyon;
+		}
+
+		var benepit = isNaN(datum['benefit'][i]) ? 0 : parseFloat(datum['benefit'][i]);
+
+		if(total_benefit[date_str] === undefined){
+			total_benefit[date_str] = benepit;
+		} else{
+			total_benefit[date_str] += benepit;
+		}
+
+		console.log("===> " + datum['income'][i]);
+
+		var inkam = isNaN(datum['income'][i]) ? 0 : parseFloat(datum['income'][i]);
+
+		if(total_income[date_str] === undefined){
+			total_income[date_str] = inkam;
+		} else{
+			total_income[date_str] += inkam;
+		}
+	}
+	
+	var salary_points = [];
+	var bonus_points = [];
+	var benefit_points = [];
+	var deduction_points = [];
+	var tax_points = [];
+	var income_points = [];
+
+	for(var i = 0; i < datum['dates'].length; i++){
+		var date = new Date(datum['dates'][i]);
+		var date_str = formatDate(date);
 
 		var salary = {
-			x: new Date(datum['dates'][i]), 
-			y: salari
+			x: date, 
+			y: total_salary[date_str]
 		};
-
-		taks = isNaN(datum['tax'][i]) ? 0 : parseFloat(datum['tax'][i]);
 
 		var tax = {
-			x: new Date(datum['dates'][i]), 
-			y: taks
+			x: date, 
+			y: total_tax[date_str]
 		};
-
-		bownus = isNaN(datum['bonus'][i]) ? 0 : parseFloat(datum['bonus'][i]);
 
 		var bonus = {
-			x: new Date(datum['dates'][i]), 
-			y: bownus
+			x: date, 
+			y: total_bonus[date_str]
 		};
 
-		dedaksyon = isNaN(datum['deduction'][i]) ? 0 : parseFloat(datum['deduction'][i]);
-
 		var deduction = {
-			x: new Date(datum['dates'][i]), 
-			y: dedaksyon
+			x: date, 
+			y: total_deduction[date_str]
+		};
+
+		var benefit = {
+			x: date, 
+			y: total_benefit[date_str]
+		};
+
+		var income = {
+			x: date, 
+			y: total_income[date_str]
 		};
 
 		salary_points.push(salary);
 		tax_points.push(tax);
 		bonus_points.push(bonus);
 		deduction_points.push(deduction);
+		benefit_points.push(benefit);
+		income_points.push(income);
 	}
+
+	var hris_chart_title = 'Payroll - Data Warehouse';
+	var chart_type = 'column';
+	var axis_y_interval = 50000;
 
 	var HRISChart = new CanvasJS.Chart("hris-chart-container", {
 		title:{
-			text: "Human Resource Information System - Data Warehouse",
+			text: hris_chart_title,
 			horizontalAlign: "center"
 		},
 
@@ -94,7 +169,7 @@ window.onload = function(){
 			title: "",
 			lineThickness: 0,
 			tickThickness: 10,
-			interval: 5000
+			interval: axis_y_interval
 		},
 
 		legend:{
@@ -102,30 +177,43 @@ window.onload = function(){
 			horizontalAlign: "center"
 		},
 
-		data:[{
+		data:[
+		 	{
+				name: "Income",
+				showInLegend: true,
+				type: chart_type,
+				color: "#0000FF",
+				dataPoints: income_points
+			}, {
 				name: "Salary",
 				showInLegend: true,
-				type: "column", 
-				color: "#0000FF",
+				type: chart_type, 
+				color: "#629b45",
 				dataPoints: salary_points
 			}, {
-				name: "Tax",
+				name: "Benefits",
 				showInLegend: true,
-				type: "column",
-				color: "#FF0000",
-				dataPoints: tax_points
+				type: chart_type,
+				color: "#23c44b",
+				dataPoints: benefit_points
 			}, {
 				name: "Bonus",
 				showInLegend: true,
-				type: "column",
-				color: "#00FFFF",
+				type: chart_type,
+				color: "#12ea5a",
 				dataPoints: bonus_points
 			}, {
 				name: "Deductions",
 				showInLegend: true,
-				type: "column",
-				color: "#00FF00",
+				type: chart_type,
+				color: "#8e4747",
 				dataPoints: deduction_points
+			}, {
+				name: "Tax",
+				showInLegend: true,
+				type: chart_type,
+				color: "#FF0000",
+				dataPoints: tax_points
 			}
 		]
 	});
@@ -164,7 +252,7 @@ window.onload = function(){
 			title: "",
 			lineThickness: 0,
 			tickThickness: 0,
-			interval: 10000
+			interval: 300000
 		},
 
 		legend:{
@@ -176,7 +264,7 @@ window.onload = function(){
 			{
 				// name: "Real-Time",
 				// showInLegend: true,
-				type: "column", 
+				type: chart_type, 
 				color: "#004B8D ",
 				dataPoints: [
 				{x: new Date('2016-04-14',0), y: 30000},
@@ -191,4 +279,15 @@ window.onload = function(){
 
 	HRISChart.render();
 	// LGUChart.render();
+}
+
+function formatDate(date){
+	var month = '' + (date.getMonth() + 1);
+	var day = '' + date.getDate();
+	var year = date.getFullYear();
+
+	if(month.length < 2) month = '0' + month;
+	if(day.length < 2) day = '0' + day;
+
+	return [year, month, day].join('-');
 }

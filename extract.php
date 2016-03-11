@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +30,7 @@
 		    die("Connection failed: " . $conn->connect_error);
 		}
 
-		// HRIS CUBE!!!
+		echo '<strong>SALARY and TAX:</strong> <br>';
 
 		$hris_payroll = array();
 		$existing = array();
@@ -71,6 +73,8 @@
 		}
 
 		$sql = sqlSelect($peyrol, '1');
+
+		echo "$sql <br>";
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -120,6 +124,8 @@
 		foreach($tax_range_ids as $id){
 			$sql = sqlSelect($peyrol, "`tax_range_id`='$id'");
 
+			echo "$sql <br>";
+
 			if($result = mysqli_query($conn, $sql)){
 				if(mysqli_num_rows($result) > 0){
 					while($row = mysqli_fetch_array($result)){
@@ -165,6 +171,8 @@
 		foreach($tax_ids as $id){
 			$sql = sqlSelect($peyrol, "`tax_id`='$id'");
 
+			echo "$sql <br>";
+
 			if($result = mysqli_query($conn, $sql)){
 				if(mysqli_num_rows($result) > 0){
 					while($row = mysqli_fetch_array($result)){
@@ -177,10 +185,13 @@
 			$cnt += 1;
 		}
 
+		echo '<br><br>';
+
 		fclose($file);
 
-
 		//////////////////// PAYROLL DEDUCTIONS
+		echo '<strong>DEDUCTIONS:</strong> <br>';
+
 		$hris_payroll_deduction = array();
 		$existing = array();
 		$deduction_ids = array();
@@ -221,6 +232,8 @@
 		}
 
 		$sql = sqlSelect($peyrol_dedaksyon, '1');
+
+		echo "$sql <br>";
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -269,6 +282,8 @@
 		foreach($deduction_ids as $id){
 			$sql = sqlSelect($peyrol_dedaksyon, "`deduction_id`='$id'");
 
+			echo "$sql <br>";
+
 			if($result = mysqli_query($conn, $sql)){
 				if(mysqli_num_rows($result) > 0){
 					while($row = mysqli_fetch_array($result)){
@@ -280,11 +295,15 @@
 			$cnt += 1;
 		}
 
+		echo '<br><br>';
+
 		fclose($file);
 
 
 
 		//////////////////// PAYROLL BONUS
+		echo '<strong>BONUS:</strong> <br>';
+
 		$hris_payroll_bonus = array();
 		$existing = array();
 		$bonus_ids = array();
@@ -325,6 +344,8 @@
 		}
 
 		$sql = sqlSelect($peyrol_bownus, '1');
+
+		echo "$sql <br>";
 
 		if($result = mysqli_query($conn, $sql)){
 			if(mysqli_num_rows($result) > 0){
@@ -373,6 +394,8 @@
 		foreach($bonus_ids as $id){
 			$sql = sqlSelect($peyrol_bownus, "`bonus_id`='$id'");
 
+			echo "$sql <br>";
+
 			if($result = mysqli_query($conn, $sql)){
 				if(mysqli_num_rows($result) > 0){
 					while($row = mysqli_fetch_array($result)){
@@ -384,15 +407,237 @@
 			$cnt += 1;
 		}
 
+		echo '<br><br>';
+
 		fclose($file);
 
-		session_start();
+		//////////////////// PAYROLL BENEFITS
+		echo '<strong>BENEFIT:</strong> <br>';
+
+		$hris_payroll_benefit = array();
+		$existing = array();
+		$benefit_ids = array();
+
+		$sql = "SELECT `id` FROM `hris_payroll_benefit`";
+
+		if($result = mysqli_query($conn_dw, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					array_push($existing, $row['id']);
+				}
+			}
+		}
+
+		$file = fopen("$hris_csvs/payroll_benefit.csv", "r");
+
+		$peyrol_benepit = array(
+				'table_name' => '',
+				'fields' => array()
+			);
+
+		$cnt = 0;
+
+		while(!feof($file)){
+			$line = fgetcsv($file);
+
+			if($cnt <= 1){
+				if($line[0] === 'table_name'){
+					$peyrol_benepit['table_name'] = "`" . $line[1] . "`";
+				} else{
+					for($i = 1; $i < count($line); $i++){
+						array_push($peyrol_benepit['fields'], "`" . $line[$i] . "`");
+					}
+				}				
+			}
+
+			$cnt += 1;
+		}
+
+		$sql = sqlSelect($peyrol_benepit, '1');
+
+		echo "$sql <br>";
+
+		if($result = mysqli_query($conn, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					if(!in_array($row['py_benefits_id'], $existing)){
+						array_push($hris_payroll_benefit, [
+								'id' => $row['py_benefits_id'],
+								'payroll_id' => $row['py_id'],
+							]);
+
+						array_push($benefit_ids, $row['benefits_id']);
+					}
+				}
+			}
+		}
+
+		fclose($file);
+
+		$peyrol_benepit = array(
+				'table_name' => '',
+				'fields' => array()
+			);
+
+		$file = fopen("$hris_csvs/payroll_benefit.csv", "r");
+
+		$cnt = 0;
+
+		while(!feof($file)){
+			$line = fgetcsv($file);
+
+			if($cnt >= 2){
+				if($line[0] === 'table_name'){
+					$peyrol_benepit['table_name'] = "`" . $line[1] . "`";
+				} else{
+					for ($i = 1; $i < count($line); $i++) { 
+						array_push($peyrol_benepit['fields'], "`" . $line[$i] . "`");
+					}
+				}
+			}
+
+			$cnt += 1;
+		}
+
+		$cnt = 0;
+
+		foreach($benefit_ids as $id){
+			$sql = sqlSelect($peyrol_benepit, "`benefits_id`='$id'");
+
+			echo "$sql <br>";
+
+			if($result = mysqli_query($conn, $sql)){
+				if(mysqli_num_rows($result) > 0){
+					while($row = mysqli_fetch_array($result)){
+						$hris_payroll_benefit[$cnt]['benefits_amount'] = $row['benefits_amount'];
+					}
+				}
+			}
+
+			$cnt += 1;
+		}
+
+		echo '<br><br>';
+
+		fclose($file);
+
+		//////////////////// PAYROLL INCOME
+		echo '<strong>INCOME:</strong> <br>';
+
+		$hris_payroll_income = array();
+		$existing = array();
+		$income_ids = array();
+
+		$sql = "SELECT `id` FROM `hris_payroll_income`";
+
+		if($result = mysqli_query($conn_dw, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					array_push($existing, $row['id']);
+				}
+			}
+		}
+
+		$file = fopen("$hris_csvs/payroll_income.csv", "r");
+
+		$peyrol_income = array(
+				'table_name' => '',
+				'fields' => array()
+			);
+
+		$cnt = 0;
+
+		while(!feof($file)){
+			$line = fgetcsv($file);
+
+			if($cnt <= 1){
+				if($line[0] === 'table_name'){
+					$peyrol_income['table_name'] = "`" . $line[1] . "`";
+				} else{
+					for($i = 1; $i < count($line); $i++){
+						array_push($peyrol_income['fields'], "`" . $line[$i] . "`");
+					}
+				}				
+			}
+
+			$cnt += 1;
+		}
+
+		$sql = sqlSelect($peyrol_income, '1');
+
+		echo "$sql <br>";
+
+		if($result = mysqli_query($conn, $sql)){
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					if(!in_array($row['py_income_id'], $existing)){
+						array_push($hris_payroll_income, [
+								'id' => $row['py_income_id'],
+								'payroll_id' => $row['py_id'],
+							]);
+
+						array_push($income_ids, $row['income_id']);
+					}
+				}
+			}
+		}
+
+		fclose($file);
+
+		$peyrol_income = array(
+				'table_name' => '',
+				'fields' => array()
+			);
+
+		$file = fopen("$hris_csvs/payroll_income.csv", "r");
+
+		$cnt = 0;
+
+		while(!feof($file)){
+			$line = fgetcsv($file);
+
+			if($cnt >= 2){
+				if($line[0] === 'table_name'){
+					$peyrol_income['table_name'] = "`" . $line[1] . "`";
+				} else{
+					for ($i = 1; $i < count($line); $i++) { 
+						array_push($peyrol_income['fields'], "`" . $line[$i] . "`");
+					}
+				}
+			}
+
+			$cnt += 1;
+		}
+
+		$cnt = 0;
+
+		foreach($income_ids as $id){
+			$sql = sqlSelect($peyrol_income, "`income_id`='$id'");
+
+			echo "$sql <br>";
+
+			if($result = mysqli_query($conn, $sql)){
+				if(mysqli_num_rows($result) > 0){
+					while($row = mysqli_fetch_array($result)){
+						$hris_payroll_income[$cnt]['income_amount'] = $row['income_amount'];
+					}
+				}
+			}
+
+			$cnt += 1;
+		}
+
+		echo '<br><br>';
+
+		fclose($file);
 
 		$_SESSION['hris_payroll'] = $hris_payroll;
 		$_SESSION['hris_payroll_deduction'] = $hris_payroll_deduction;
 		$_SESSION['hris_payroll_bonus'] = $hris_payroll_bonus;
+		$_SESSION['hris_payroll_benefit'] = $hris_payroll_benefit;
+		$_SESSION['hris_payroll_income'] = $hris_payroll_income;
 
-		echo "Data EXTRACTION Successful!";
+		echo '<strong>Data EXTRACTION Successful!</strong>';
 	?>
 
 	<?php
